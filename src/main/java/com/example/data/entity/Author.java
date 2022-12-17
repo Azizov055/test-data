@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +18,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -25,6 +28,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "authors")
+@NamedEntityGraph(name = "authors-books",
+    attributeNodes = @NamedAttributeNode(value = "books"))
 @Data
 @Builder
 @AllArgsConstructor
@@ -51,8 +56,11 @@ public class Author {
     @Embedded
     private LogTime logTime;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<BookAuthor> bookAuthors;
+//    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+//    private List<BookAuthor> bookAuthors;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Book> books;
 
     public void setAllBooks(List<Book> books) {
         List<BookAuthor> bookAuthorList = new ArrayList<>();
@@ -63,10 +71,8 @@ public class Author {
                     .book(book)
                     .createdAt(LocalDate.now())
                     .build();
-            book.getBookAuthors().add(bookAuthor);
+//            book.getBookAuthors().add(bookAuthor);
         }
-
-        this.bookAuthors = bookAuthorList;
     }
 
 }

@@ -42,15 +42,12 @@ public class Book {
     @Embedded
     private LogTime logTime;
 
-//    @ManyToMany
-//    @JoinTable(
-//            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id")
-//    )
-//    private List<Author> authors = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private Author author;
 
-    @OneToMany(mappedBy = "book")
-    private List<BookAuthor> bookAuthors = new ArrayList<>();
+//    @OneToMany(mappedBy = "book")
+//    private List<BookAuthor> bookAuthors = new ArrayList<>();
 
     public Book(String name, LocalDate publishedAt, int pageCount) {
         this.name = name;

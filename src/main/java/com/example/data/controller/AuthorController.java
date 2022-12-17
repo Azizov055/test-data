@@ -94,7 +94,7 @@ public class AuthorController {
                     .name(bookRequest.getName())
                     .pageCount(bookRequest.getPageCount())
                     .publishedAt(bookRequest.getPublishedAt())
-                    .bookAuthors(new ArrayList<>())
+//                    .bookAuthors(new ArrayList<>())
                     .logTime(LogTime.builder().createdAt(requestedAt).updatedAt(requestedAt).build())
                     .build();
 
@@ -116,8 +116,40 @@ public class AuthorController {
 
             author.setAllBooks(books);
             authorRepository.save(author);
-            bookAuthorRepository.saveAll(author.getBookAuthors());
+//            bookAuthorRepository.saveAll(author.getBookAuthors());
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AuthorDto>> getAuthors() {
+        List<Author> authors = authorRepository.findAllWithBooks(); // authorRepository.findAll();
+
+        List<AuthorDto> authorDtoList = new ArrayList<>();
+
+        for (var author : authors) {
+            List<BookDto> bookDtoList = new ArrayList<>();
+
+            for (var book : author.getBooks()) {
+                bookDtoList.add(
+                        BookDto.builder()
+                                .name(book.getName())
+                                .id(book.getId())
+                                .build()
+                );
+            }
+
+            var authorDto = AuthorDto.builder()
+                    .id(author.getId())
+                    .name(author.getName())
+                    .surname(author.getSurname())
+                    .birthDate(author.getBirthDate())
+                    .books(bookDtoList)
+                    .build();
+
+            authorDtoList.add(authorDto);
+        }
+
+        return ResponseEntity.ok(authorDtoList);
     }
 
 }
