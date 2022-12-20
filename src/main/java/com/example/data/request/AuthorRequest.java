@@ -16,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthorRequest {
 
+    private Long id;
     private String name;
     private String surname;
     private String email;

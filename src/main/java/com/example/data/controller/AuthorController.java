@@ -5,6 +5,7 @@ import com.example.data.dto.BookDto;
 import com.example.data.entity.Author;
 import com.example.data.entity.Book;
 import com.example.data.entity.LogTime;
+import com.example.data.mapper.AuthorMapper;
 import com.example.data.repository.AuthorRepository;
 import com.example.data.repository.BookAuthorRepository;
 import com.example.data.repository.BookRepository;
@@ -12,6 +13,7 @@ import com.example.data.request.AuthorRequest;
 import com.example.data.request.AuthorsRequest;
 import com.example.data.request.BookRequest;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +35,7 @@ public class AuthorController {
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
     private final BookAuthorRepository bookAuthorRepository;
+    private final AuthorMapper authorMapper = Mappers.getMapper(AuthorMapper.class);
 
     @PostMapping
     public void createAuthor(@RequestBody AuthorRequest authorRequest) {
@@ -122,34 +125,39 @@ public class AuthorController {
 
     @GetMapping
     public ResponseEntity<List<AuthorDto>> getAuthors() {
-        List<Author> authors = authorRepository.findAllWithBooks(); // authorRepository.findAll();
+//        List<Author> authors = authorRepository.findAll();
 
-        List<AuthorDto> authorDtoList = new ArrayList<>();
+//        List<AuthorDto> authorDtoList = new ArrayList<>();
 
-        for (var author : authors) {
-            List<BookDto> bookDtoList = new ArrayList<>();
+//        for (var author : authors) {
+//            List<BookDto> bookDtoList = new ArrayList<>();
 
-            for (var book : author.getBooks()) {
-                bookDtoList.add(
-                        BookDto.builder()
-                                .name(book.getName())
-                                .id(book.getId())
-                                .build()
-                );
-            }
+//            for (var book : author.getBooks()) {
+//                bookDtoList.add(
+//                        BookDto.builder()
+//                                .name(book.getName())
+//                                .id(book.getId())
+//                                .build()
+//                );
+//            }
 
-            var authorDto = AuthorDto.builder()
-                    .id(author.getId())
-                    .name(author.getName())
-                    .surname(author.getSurname())
-                    .birthDate(author.getBirthDate())
-                    .books(bookDtoList)
-                    .build();
+//            var authorDto = AuthorDto.builder()
+//                    .id(author.getId())
+//                    .name(author.getName())
+//                    .surname(author.getSurname())
+//                    .birthDate(author.getBirthDate())
+//                    .books(bookDtoList)
+//                    .build();
 
-            authorDtoList.add(authorDto);
-        }
+//            var authorDto = authorMapper.mapEntityToDto(author);
+//            authorDto.setBooks(bookDtoList);
+//            AuthorDto authorDto = new AuthorDto();
+//            authorMapper.mapEntityToExistingDto(author, authorDto);
+//
+//            authorDtoList.add(authorDto);
+//        }
 
-        return ResponseEntity.ok(authorDtoList);
+        return ResponseEntity.ok(authorMapper.mapEntityListToDtoList(authorRepository.findAll()));
     }
 
 }

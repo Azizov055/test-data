@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                            http://www.liquibase.org/xml/ns/pro
+                            http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.1.xsd">
+
+    <changeSet id="create-house-table" author="Testov Test">
+        <createTable tableName="house" schemaName="public">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"
+                             primaryKeyName="house_id_pk" />
+            </column>
+
+            <column name="owner" type="varchar(250)">
+                <constraints unique="true"
+                             uniqueConstraintName="house_owner_unq" />
+            </column>
+
+            <column name="fully_paid" type="boolean" defaultValueBoolean="false"/>
+        </createTable>
+
+        <addAutoIncrement tableName="house" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1" />
+
+    </changeSet>
+
+</databaseChangeLog>

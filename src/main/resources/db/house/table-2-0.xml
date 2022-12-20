@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+                            http://www.liquibase.org/xml/ns/dbchangelog-ext
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+                            http://www.liquibase.org/xml/ns/pro
+                            http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.1.xsd">
+
+    <changeSet id="create-room-table" author="Testov Test">
+        <createTable tableName="rooms">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"
+                             primaryKeyName="room_id_pk" />
+            </column>
+            <column name="name" type="varchar(250)" />
+            <column name="house_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addAutoIncrement tableName="rooms" columnName="id"
+                          columnDataType="bigint" startWith="1" incrementBy="1" />
+        <addForeignKeyConstraint baseTableName="item"
+                                 baseColumnNames="house_id" constraintName="room_house_id_fk"
+                                 referencedTableName="house" referencedColumnNames="id" />
+    </changeSet>
+
+</databaseChangeLog>
